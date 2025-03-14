@@ -2,19 +2,19 @@
     <div>
         <nav class="flex items-center h-10 shadow-xl px-7">
             <div class="flex">
-                <router-link to="" class="font-semibold text-gray-700 me-4" role="button" v-if="localeStore.isRTL">
+                <router-link to="" class="font-semibold text-gray-700 me-4 dark:text-gray-200" role="button" v-if="localeStore.isRTL">
                     <span class="w-5" @click="setLocale('en')">
                         En
                     </span>
                 </router-link>
-                <router-link to="" class="font-semibold text-gray-700 me-4" role="button" v-else>
+                <router-link to="" class="font-semibold text-gray-700 me-4 dark:text-gray-200" role="button" v-else>
                     <span class="w-5" @click="setLocale('ar')">
                         العربية
                     </span>
                 </router-link>
             </div>
 
-            <router-link to="" role="button" class="relative flex text-gray-700 rounded-full cursor-pointer"
+            <router-link to="" role="button" class="relative flex text-gray-700 rounded-full cursor-pointer dark:text-gray-200"
                 @click="emit('toggle-theme')">
                 <span class="absolute -inset-1.5" />
                 <span class="sr-only">toggle theme</span>
