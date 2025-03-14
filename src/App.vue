@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const localeStore = useLocaleStore();
 const { locale } = useI18n();
+const localeStore = useLocaleStore();
 
 const isRTL = computed(() => {
   return locale.value === 'ar';
@@ -9,15 +9,23 @@ const isRTL = computed(() => {
 
 <template>
   <div>
-    <main>
-      <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <router-view v-slot="{ Component }">
-          <transition name="fade">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-      </div>
-    </main>
+    <!-- Overlay Component -->
+    <overlay-component :visible="localeStore.isOverlayVisible" />
+
+    <div :dir="isRTL ? 'rtl' : 'ltr'" :class="{ 'rtl': isRTL, 'ltr': !isRTL }">
+      <!-- navbar component -->
+      <navbar />
+
+      <main>
+        <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <router-view v-slot="{ Component }">
+            <transition name="fade">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 

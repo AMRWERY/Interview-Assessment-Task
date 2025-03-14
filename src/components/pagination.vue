@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="px-4 py-3 mt-8 bg-white border-t border-gray-200 sm:px-6">
+        <div class="px-4 py-3 mt-8 bg-white sm:px-6">
             <!-- Mobile: Previous / Next Links -->
             <div class="flex justify-between flex-1 sm:hidden">
                 <button @click="goToPrevPage" :class="mobileButtonClass(props.currentPage === 1)"
