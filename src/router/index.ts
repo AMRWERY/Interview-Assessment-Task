@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 import i18n from "@/plugins/i18n.ts";
-import home from "../views/home.vue";
+import tableView from "../views/table-view.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      name: "home",
-      component: home,
+      name: "table-view",
+      component: tableView,
       meta: {
-        title: "meta.home",
+        title: "meta.table_view",
       },
     },
 
