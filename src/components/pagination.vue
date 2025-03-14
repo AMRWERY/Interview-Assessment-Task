@@ -5,11 +5,11 @@
             <div class="flex justify-between flex-1 sm:hidden">
                 <button @click="goToPrevPage" :class="mobileButtonClass(props.currentPage === 1)"
                     :disabled="props.currentPage === 1">
-                    Previous
+                    {{ $t('pagiation.previous') }}
                 </button>
                 <button @click="goToNextPage" :class="mobileButtonClass(props.currentPage === props.totalPages)"
                     :disabled="props.currentPage === props.totalPages">
-                    Next
+                    {{ $t('pagiation.next') }}
                 </button>
             </div>
 
@@ -20,7 +20,8 @@
                         <!-- Previous Button -->
                         <button @click="goToPrevPage" :class="buttonClass('prev')" :disabled="props.currentPage === 1">
                             <span class="sr-only">Previous</span>
-                            <iconify-icon icon="material-symbols:keyboard-arrow-left" width="24" height="24" class="rtl:rotate-180" />
+                            <iconify-icon icon="material-symbols:keyboard-arrow-left" width="24" height="24"
+                                class="rtl:rotate-180" />
                         </button>
 
                         <!-- Page Numbers -->
@@ -28,7 +29,8 @@
                             <template v-if="typeof page === 'number'">
                                 <button @click="changePage(page)"
                                     :aria-current="page === props.currentPage ? 'page' : undefined"
-                                    :class="page === props.currentPage ? activePageClass : inactivePageClass" class="dark:text-gray-100">
+                                    :class="page === props.currentPage ? activePageClass : inactivePageClass"
+                                    class="dark:text-gray-100">
                                     {{ page }}
                                 </button>
                             </template>
@@ -44,7 +46,8 @@
                         <button @click="goToNextPage" :class="buttonClass('next')"
                             :disabled="props.currentPage === props.totalPages">
                             <span class="sr-only">Next</span>
-                            <iconify-icon icon="material-symbols:keyboard-arrow-right" width="24" height="24" class="rtl:rotate-180" />
+                            <iconify-icon icon="material-symbols:keyboard-arrow-right" width="24" height="24"
+                                class="rtl:rotate-180" />
                         </button>
                     </nav>
                 </div>

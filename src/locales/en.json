@@ -2,5 +2,17 @@
   "meta": {
     "table_view": "Table view",
     "page_not_found": "Page not found 😄"
+  },
+  "table": {
+    "users_table": "Users Table",
+    "id": "ID",
+    "name": "Name",
+    "email": "Email",
+    "no_results_found": "No results found.",
+    "search_by_name_role_or_status": "Search by name, role or status..."
+  },
+  "pagiation": {
+    "previous": "Previous",
+    "next": "Next"
   }
 }

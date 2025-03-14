@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="text-center mb-7">
-      <p class="font-semibold text-gray-700 sm:text-lg md:text-3xl dark:text-gray-200">Users Table</p>
+      <p class="font-semibold text-gray-700 sm:text-lg md:text-3xl dark:text-gray-200">{{ $t('table.users_table') }}</p>
     </div>
-    
+
     <div class="container p-4 mx-auto shadow-lg">
       <!-- Search Input -->
       <search-input v-model="searchQuery" />
@@ -13,14 +13,17 @@
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead class="bg-gray-50 dark:bg-[#181a1b]">
             <tr>
-              <th class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                ID
+              <th
+                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                {{ $t('table.id') }}
               </th>
-              <th class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                Name
+              <th
+                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                {{ $t('table.name') }}
               </th>
-              <th class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                Email
+              <th
+                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                {{ $t('table.email') }}
               </th>
             </tr>
           </thead>
@@ -31,7 +34,7 @@
               <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ item.email }}</td>
             </tr>
             <tr v-if="paginatedData.length === 0">
-              <td colspan="3" class="px-4 py-2 text-center">No results found.</td>
+              <td colspan="3" class="px-4 py-2 text-center">{{ $t('table.no_results_found') }}</td>
             </tr>
           </tbody>
         </table>
