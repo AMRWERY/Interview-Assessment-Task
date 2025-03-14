@@ -21,6 +21,7 @@ const router = createRouter({
       component: () => import("@/views/error-404.vue"),
       meta: {
         title: "meta.page_not_found",
+        hideNavbar: true
       },
     },
   ],

@@ -5,7 +5,7 @@
 
     <div :dir="isRTL ? 'rtl' : 'ltr'" :class="{ 'rtl': isRTL, 'ltr': !isRTL }">
       <!-- navbar component -->
-      <navbar :is-dark="themeStore.isDark" @toggle-theme="themeStore.toggleTheme" />
+      <navbar v-if="showNavbar" :is-dark="themeStore.isDark" @toggle-theme="themeStore.toggleTheme" />
 
       <main>
         <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -38,6 +38,12 @@ onMounted(() => {
 const overlayVisible = computed(() => {
   return themeStore.showOverlay || localeStore.isOverlayVisible;
 });
+
+const route = useRoute();
+
+const showNavbar = computed(() => {
+  return !route.meta.hideNavbar;
+})
 </script>
 
 <style>
