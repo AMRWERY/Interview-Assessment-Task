@@ -14,5 +14,11 @@
   "pagiation": {
     "previous": "Previous",
     "next": "Next"
+  },
+  "error_page": {
+    "error_404": "Error 404",
+    "page_not_found": "Page not found",
+    "the_page_you_are_looking_for_does_not_exist": "The page you’re looking for doesn’t exist.",
+    "go_home": "Go Home"
   }
 }

@@ -1,20 +1,23 @@
 <template>
     <div>
-        <div class="py-6 bg-white sm:py-8 lg:py-12">
+        <div class="py-6 sm:py-8 lg:py-12">
             <div class="max-w-screen-lg px-4 mx-auto md:px-8">
                 <div class="grid gap-8 sm:grid-cols-2">
                     <!-- content - start -->
                     <div class="flex flex-col items-center justify-center sm:items-start md:py-24 lg:py-32">
-                        <p class="mb-4 text-sm font-semibold text-indigo-500 uppercase md:text-base">Error 404</p>
-                        <h1 class="mb-2 text-2xl font-bold text-center text-gray-800 sm:text-left md:text-3xl">Page not
-                            found</h1>
+                        <p
+                            class="mb-4 text-sm font-semibold text-indigo-500 uppercase md:text-base dark:text-indigo-300">
+                            {{ $t('error_page.error_404') }}</p>
+                        <h1
+                            class="mb-2 text-2xl font-bold text-center text-gray-800 sm:text-start md:text-3xl dark:text-gray-200">
+                            {{ $t('error_page.page_not_found') }}</h1>
 
-                        <p class="mb-8 text-center text-gray-500 sm:text-left md:text-lg">The page you’re looking for
-                            doesn’t exist.</p>
+                        <p class="mb-8 text-center text-gray-500 sm:text-start md:text-lg dark:text-gray-100">{{
+                            $t('error_page.the_page_you_are_looking_for_does_not_exist') }}</p>
 
                         <router-link to="/"
-                            class="inline-block px-8 py-3 text-sm font-semibold text-center text-gray-500 transition duration-100 bg-gray-200 rounded-lg outline-none ring-indigo-300 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">Go
-                            home</router-link>
+                            class="inline-block px-8 py-3 text-sm font-semibold text-center text-gray-500 transition duration-100 bg-gray-200 rounded-lg outline-none ring-indigo-300 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">{{
+                                $t('error_page.go_home') }}</router-link>
                     </div>
                     <!-- content - end -->
 
