@@ -1,20 +1,11 @@
-<script setup lang="ts">
-const { locale } = useI18n();
-const localeStore = useLocaleStore();
-
-const isRTL = computed(() => {
-  return locale.value === 'ar';
-});
-</script>
-
 <template>
   <div>
     <!-- Overlay Component -->
-    <overlay-component :visible="localeStore.isOverlayVisible" />
+    <overlay-component :visible="overlayVisible" />
 
     <div :dir="isRTL ? 'rtl' : 'ltr'" :class="{ 'rtl': isRTL, 'ltr': !isRTL }">
       <!-- navbar component -->
-      <navbar />
+      <navbar :is-dark="themeStore.isDark" @toggle-theme="themeStore.toggleTheme" />
 
       <main>
         <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -28,6 +19,26 @@ const isRTL = computed(() => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeStore } from '@/stores/themeStore.ts'
+
+const { locale } = useI18n();
+const localeStore = useLocaleStore();
+const themeStore = useThemeStore();
+
+const isRTL = computed(() => {
+  return locale.value === 'ar';
+});
+
+onMounted(() => {
+  themeStore.loadTheme();
+});
+
+const overlayVisible = computed(() => {
+  return themeStore.showOverlay || localeStore.isOverlayVisible;
+});
+</script>
 
 <style>
 .fade-enter-active,
