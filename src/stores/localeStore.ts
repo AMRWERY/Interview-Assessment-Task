@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia'
+import { defineStore } from "pinia";
 
 interface LocaleState {
   locale: string;
@@ -14,9 +14,9 @@ export const useLocaleStore = defineStore("locales", {
   actions: {
     updateLocale(value: string): void {
       this.isOverlayVisible = true;
-      this.locale = value;
-      localStorage.setItem("locale", value);
       setTimeout(() => {
+        this.locale = value;
+        localStorage.setItem("locale", value);
         this.isOverlayVisible = false;
       }, 3000);
     },
