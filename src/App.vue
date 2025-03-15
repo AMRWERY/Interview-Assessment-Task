@@ -21,7 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router';
 import { useThemeStore } from '@/stores/themeStore.ts'
+import { useLocaleStore } from './stores/localeStore';
 
 const { locale } = useI18n();
 const localeStore = useLocaleStore();
