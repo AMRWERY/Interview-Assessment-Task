@@ -51,6 +51,9 @@
                 <th
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                 </th>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                </th>
               </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-gray-200 dark:divide-gray-700">
@@ -62,6 +65,9 @@
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ formatDate(user.dateJoined) }}</td>
                 <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)">{{
                   $t('table.edit') }}</td>
+                <td class="py-2 text-red-600 cursor-pointer dark:text-red-300" @click="openDeleteDialog(user)">
+                  <iconify-icon icon="material-symbols:delete-forever" width="24" height="24"></iconify-icon>
+                </td>
               </tr>
 
               <tr v-if="!loading && paginatedData.length === 0">
@@ -79,12 +85,17 @@
 
     <!-- edit-user-dialog component -->
     <edit-user-dialog v-if="dialogOpen" :user="selectedUser" @close="closeDialog" @save="handleUserUpdate" />
+
+    <!-- delete-user-dialog component -->
+    <delete-user-dialog v-model="deleteDialogOpen" :message="deleteMessage" @confirm="confirmDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
+import type { User } from '@/user.model';
 import { useMockApiService } from '@/services/mockApiService';
+import { useI18n } from 'vue-i18n';
 
 const { users, loading, fetchUsers, removeUser } = useMockApiService();
 
@@ -148,4 +159,28 @@ function formatDate(date: string): string {
   // Convert the date string to a Date object, then to ISO format, and extract YYYY-MM-DD.
   return new Date(date).toISOString().slice(0, 10);
 }
+
+const { t } = useI18n();
+const deleteDialogOpen = ref(false);
+const selectedUserForDelete = ref<User | null>(null);
+const deleteMessage = ref('');
+
+const openDeleteDialog = (user: User) => {
+  selectedUserForDelete.value = user;
+  deleteMessage.value = t('dialog.deleteMessage', { name: user.name });
+  // deleteMessage.value = `Are you sure you want to delete ${user.name}?`;
+  deleteDialogOpen.value = true;
+};
+
+const confirmDelete = async () => {
+  if (selectedUserForDelete.value) {
+    try {
+      await removeUser(selectedUserForDelete.value.id);
+      fetchUsers(1, 1000); // Refresh the user list
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
+  }
+  deleteDialogOpen.value = false;
+};
 </script>

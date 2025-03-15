@@ -33,10 +33,12 @@
     "email": "الايميل",
     "date_joined": "تاريخ الانضمام",
     "cancel": "ألغاء",
-    "update": "تحديث"
+    "update": "تحديث",
+    "delete": "مسح",
+    "deleteMessage": "هل أنت متأكد أنك تريد حذف {name}؟"
   },
   "form": {
-    "add_new_user":"إضافة مستخدم جديد",
+    "add_new_user": "إضافة مستخدم جديد",
     "name": "الاسم",
     "role": "الدور",
     "email": "الايميل",

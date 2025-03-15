@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    DeleteUserDialog: typeof import('./src/components/delete-user-dialog.vue')['default']
     EditUserDialog: typeof import('./src/components/edit-user-dialog.vue')['default']
     Navbar: typeof import('./src/components/navbar.vue')['default']
     Overlay: typeof import('./src/components/overlay.vue')['default']

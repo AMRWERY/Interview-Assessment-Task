@@ -33,7 +33,9 @@
     "date_joined": "Date Joined",
     "role": "Role",
     "cancel": "Cancel",
-    "update": "Update"
+    "update": "Update",
+    "delete": "Delete",
+    "deleteMessage": "Are you sure you want to delete {name}?"
   },
   "form": {
     "add_new_user":"Add new User",
