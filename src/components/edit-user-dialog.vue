@@ -27,6 +27,12 @@
                         <input type="text" v-model="editedUser.role"
                             class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200" />
                     </div>
+                    <div>
+                        <label class="block mb-1 text-gray-700 dark:text-gray-300">{{ $t('dialog.date_joined')
+                            }}</label>
+                        <input type="date" v-model="editedUser.dateJoined"
+                            class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200" />
+                    </div>
                 </div>
                 <div class="flex justify-end gap-4 pt-6 border-t border-gray-300 dark:border-gray-600">
                     <button type="button" class="px-4 py-2 text-sm text-gray-800 bg-gray-200 rounded hover:bg-gray-300"
@@ -44,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, reactive, watch } from 'vue';
+import { defineEmits, reactive, watch } from 'vue';
 import type { User } from "@/user.model";
 
 const props = defineProps<{ user: User | null }>();
@@ -58,8 +64,13 @@ const editedUser = reactive({
     id: 0,
     name: '',
     email: '',
-    role: ''
+    role: '',
+    dateJoined: ''
 });
+
+function formatDate(date: string): string {
+    return new Date(date).toISOString().slice(0, 10);
+}
 
 // Watch for changes in the incoming user prop and update the local copy
 watch(
@@ -70,6 +81,9 @@ watch(
             editedUser.name = newUser.name;
             editedUser.email = newUser.email;
             editedUser.role = newUser.role;
+            editedUser.dateJoined = newUser.dateJoined
+                ? formatDate(newUser.dateJoined)
+                : '';
         }
     },
     { immediate: true }
@@ -79,8 +93,8 @@ const close = () => {
     emit('close');
 };
 
+// Emit updated user data
 const save = () => {
-    // Emit updated user data
     emit('save', { ...editedUser });
     emit('close');
 };

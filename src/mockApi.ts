@@ -1,16 +1,18 @@
-import type { User, Role } from "@/user.model";
+import type { User, Role, UsersResponse } from "@/user.model";
+
+const roles: Role[] = [
+  { id: 1, name: "Admin" },
+  { id: 2, name: "Manager" },
+  { id: 3, name: "Viewer" },
+];
 
 const users: User[] = Array.from({ length: 50 }, (_, i) => ({
   id: i + 1,
   name: `User ${i + 1}`,
   email: `user${i + 1}@example.com`,
-  role: i % 2 === 0 ? "Admin" : "User",
+  role: i % 3 === 0 ? "Admin" : i % 3 === 1 ? "Manager" : "Viewer",
+  dateJoined: new Date(2025, 2, 15).toISOString(),
 }));
-
-const roles: Role[] = [
-  { id: 1, name: "Admin" },
-  { id: 2, name: "User" },
-];
 
 const simulateLatency = (fn: () => any) => {
   return new Promise((resolve, reject) => {
@@ -33,11 +35,35 @@ export const getUsers = (
   role?: string
 ) => {
   return simulateLatency(() => {
-    let filteredUsers = role ? users.filter((u) => u.role === role) : users;
+    let filteredUsers = [...users];
+    if (role) filteredUsers = filteredUsers.filter(u => u.role === role);
+    filteredUsers.sort((a, b) => b.id - a.id);
+    const total = filteredUsers.length;
     const start = (page - 1) * limit;
-    return filteredUsers.slice(start, start + limit);
+    return {
+      users: filteredUsers.slice(start, start + limit),
+      total,
+      skip: start,
+      limit,
+    } as UsersResponse;
   });
 };
+// export const getUsers = (
+//   page: number = 1,
+//   limit: number = 10,
+//   role?: string
+// ) => {
+//   return simulateLatency(() => {
+//     let filteredUsers = [...users]; // Create a copy to avoid mutating the original array
+//     if (role) {
+//       filteredUsers = filteredUsers.filter((u) => u.role === role);
+//     }
+//     // Sort users by ID descending (newest first)
+//     filteredUsers.sort((a, b) => b.id - a.id);
+//     const start = (page - 1) * limit;
+//     return filteredUsers.slice(start, start + limit);
+//   });
+// };
 
 // Get a specific user by ID
 export const getUserById = (id: number) => {

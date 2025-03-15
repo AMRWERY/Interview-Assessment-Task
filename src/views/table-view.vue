@@ -5,8 +5,16 @@
     </div>
 
     <div class="container p-4 mx-auto shadow-lg">
-      <!-- Search Input -->
-      <search-input v-model="searchQuery" />
+      <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <!-- Search Input -->
+        <search-input v-model="searchQuery" />
+
+        <router-link to="/add-new-user" type="button"
+          class="flex items-center justify-center px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
+          <iconify-icon icon="material-symbols:add" width="20" height="20"></iconify-icon>
+          <span class="ms-1">{{ $t('table.add_user') }}</span>
+        </router-link>
+      </div>
 
       <!-- Responsive Table Wrapper -->
       <div class="overflow-x-auto rounded shadow dark:bg-[#181a1b]">
@@ -38,7 +46,10 @@
                 </th>
                 <th
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-
+                  {{ $t('table.date_joined') }}
+                </th>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                 </th>
               </tr>
             </thead>
@@ -48,7 +59,9 @@
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.name }}</td>
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.role }}</td>
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.email }}</td>
-                <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)">{{ $t('table.edit') }}</td>
+                <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ formatDate(user.dateJoined) }}</td>
+                <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)">{{
+                  $t('table.edit') }}</td>
               </tr>
 
               <tr v-if="!loading && paginatedData.length === 0">
@@ -65,10 +78,7 @@
     </div>
 
     <!-- edit-user-dialog component -->
-    <edit-user-dialog v-if="dialogOpen"
-      :user="selectedUser"
-      @close="closeDialog"
-      @save="handleUserUpdate" />
+    <edit-user-dialog v-if="dialogOpen" :user="selectedUser" @close="closeDialog" @save="handleUserUpdate" />
   </div>
 </template>
 
@@ -76,10 +86,10 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { useMockApiService } from '@/services/mockApiService';
 
-const { users, loading, error, fetchUsers, addUser, removeUser } = useMockApiService();
+const { users, loading, fetchUsers, removeUser } = useMockApiService();
 
 onMounted(() => {
-  fetchUsers();
+  fetchUsers(1, 1000);
 });
 
 const searchQuery = ref('');
@@ -96,7 +106,9 @@ const filteredData = computed(() => {
   );
 });
 
-const totalPages = computed(() => Math.ceil(filteredData.value.length / rowsPerPage));
+const totalUsers = computed(() => filteredData.value.length);
+const totalPages = computed(() => Math.ceil(totalUsers.value / rowsPerPage));
+// const totalPages = computed(() => Math.ceil(filteredData.value.length / rowsPerPage));
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * rowsPerPage;
@@ -131,7 +143,9 @@ function handleUserUpdate(updatedUser: any) {
   }
 }
 
-// const createNewUser = () => {
-//   addUser({ name: "New User", email: "new@example.com", role: "User" });
-// };
+function formatDate(date: string): string {
+  if (!date) return '';
+  // Convert the date string to a Date object, then to ISO format, and extract YYYY-MM-DD.
+  return new Date(date).toISOString().slice(0, 10);
+}
 </script>

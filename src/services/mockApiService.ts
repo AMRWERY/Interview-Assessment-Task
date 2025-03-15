@@ -7,11 +7,12 @@ import {
   deleteUser,
   getRoles,
 } from "@/mockApi";
-import type { User, Role } from "@/user.model";
+import type { User, Role, UsersResponse } from "@/user.model";
 
 export function useMockApiService() {
   const users = ref<User[]>([]);
   const roles = ref<Role[]>([]);
+  const totalUsers = ref(0);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -20,8 +21,9 @@ export function useMockApiService() {
     error.value = null;
     getUsers(page, limit, role)
       .then((result) => {
-        users.value = result as User[];
-        console.log(users.value);
+        const response = result as UsersResponse;
+        users.value = response.users;
+        totalUsers.value = response.total; // Update total
       })
       .catch((err) => {
         error.value = err as string;
@@ -47,20 +49,38 @@ export function useMockApiService() {
       });
   };
 
-  const addUser = (user: { name: string; email: string; role: string }) => {
+  const addUser = (user: Omit<User, "id">) => {
     loading.value = true;
     error.value = null;
-    createUser(user)
+    return createUser(user)
       .then((newUser) => {
         users.value.push(newUser as User);
+        fetchUsers(1);
+        return newUser;
       })
       .catch((err) => {
         error.value = err as string;
+        throw err;
       })
       .finally(() => {
         loading.value = false;
       });
   };
+
+  // const addUser = (user: { id: number, name: string; email: string; role: string; dateJoined: string }) => {
+  //   loading.value = true;
+  //   error.value = null;
+  //   createUser({ ...user, dateJoined: new Date().toISOString() })
+  //     .then((newUser) => {
+  //       users.value.push(newUser as User);
+  //     })
+  //     .catch((err) => {
+  //       error.value = err as string;
+  //     })
+  //     .finally(() => {
+  //       loading.value = false;
+  //     });
+  // };
 
   const editUser = (
     id: number,
@@ -120,6 +140,7 @@ export function useMockApiService() {
   return {
     users,
     roles,
+    totalUsers,
     loading,
     error,
     fetchUsers,

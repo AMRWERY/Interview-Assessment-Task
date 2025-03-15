@@ -1,6 +1,7 @@
 {
   "meta": {
     "table_view": "Table view",
+    "add_new_user": "Add new User",
     "page_not_found": "Page not found 😄"
   },
   "table": {
@@ -9,9 +10,11 @@
     "name": "Name",
     "role": "Role",
     "email": "Email",
+    "date_joined": "Date Joined",
     "no_results_found": "No results found.",
     "search_by_name_role_or_status": "Search by name, role or status...",
-    "edit": "Edit"
+    "edit": "Edit",
+    "add_user": "Add User"
   },
   "pagiation": {
     "previous": "Previous",
@@ -27,8 +30,20 @@
     "edit_user": "Edit User",
     "name": "Name",
     "email": "Email",
+    "date_joined": "Date Joined",
     "role": "Role",
     "cancel": "Cancel",
     "update": "Update"
+  },
+  "form": {
+    "add_new_user":"Add new User",
+    "name": "Name",
+    "email": "Email",
+    "date_joined": "Date Joined",
+    "role": "Role",
+    "admin": "Admin",
+    "manager": "Manager",
+    "viewer": "Viewer",
+    "add": "Submit"
   }
 }

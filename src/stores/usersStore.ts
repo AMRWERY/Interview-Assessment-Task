@@ -4,7 +4,7 @@ import type { User } from "@/user.model";
 export const useUserStore = defineStore("users", {
   state: () => ({
     users: [] as User[],
-    SingleUser: {} as User,
+    singleUser: {} as User,
     total: 0,
     skip: 0,
     limit: 0,

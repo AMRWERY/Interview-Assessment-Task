@@ -13,6 +13,14 @@ const router = createRouter({
         title: "meta.table_view",
       },
     },
+    {
+      path: "/add-new-user",
+      name: "add-new-user",
+      component: () => import("@/views/add-new-user.vue"),
+      meta: {
+        title: "meta.add_new_user",
+      },
+    },
 
     //error-404
     {

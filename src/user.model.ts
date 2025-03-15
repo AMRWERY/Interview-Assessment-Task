@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: string;
+  dateJoined: string;
 }
 
 export interface Role {
@@ -16,3 +17,11 @@ export interface UsersResponse {
   skip: number;
   limit: number;
 }
+
+export type NewUser = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  dateJoined: string;
+};
