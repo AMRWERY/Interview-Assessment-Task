@@ -28,25 +28,35 @@
           <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-50 dark:bg-[#181a1b]">
               <tr>
-                <th
+                <th @click="sortBy('id')"
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                   {{ $t('table.id') }}
+                  <iconify-icon v-if="sortByField === 'id'"
+                    :icon="sortDirection === 'asc' ? 'mdi:arrow-up' : 'mdi:arrow-down'" class="ms-1"></iconify-icon>
                 </th>
-                <th
+                <th @click="sortBy('name')"
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                   {{ $t('table.name') }}
+                  <iconify-icon v-if="sortByField === 'name'"
+                    :icon="sortDirection === 'asc' ? 'mdi:arrow-up' : 'mdi:arrow-down'" class="ms-1"></iconify-icon>
                 </th>
-                <th
+                <th @click="sortBy('role')"
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                   {{ $t('table.role') }}
+                  <iconify-icon v-if="sortByField === 'role'"
+                    :icon="sortDirection === 'asc' ? 'mdi:arrow-up' : 'mdi:arrow-down'" class="ms-1"></iconify-icon>
                 </th>
-                <th
+                <th @click="sortBy('email')"
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                   {{ $t('table.email') }}
+                  <iconify-icon v-if="sortByField === 'email'"
+                    :icon="sortDirection === 'asc' ? 'mdi:arrow-up' : 'mdi:arrow-down'" class="ms-1"></iconify-icon>
                 </th>
-                <th
+                <th @click="sortBy('dateJoined')"
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
                   {{ $t('table.date_joined') }}
+                  <iconify-icon v-if="sortByField === 'dateJoined'"
+                    :icon="sortDirection === 'asc' ? 'mdi:arrow-up' : 'mdi:arrow-down'" class="ms-1"></iconify-icon>
                 </th>
                 <th
                   class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
@@ -107,19 +117,64 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const rowsPerPage = 10;
 
+const sortByField = ref<keyof User | null>(null);
+const sortDirection = ref<'asc' | 'desc'>('asc');
+
 const filteredData = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return users.value;
+  let filtered = users.value;
+
+  // Search filter
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(user =>
+      (user.name && user.name.toLowerCase().includes(query)) ||
+      (user.email && user.email.toLowerCase().includes(query))
+    );
   }
-  return users.value.filter(user =>
-    (user.name && user.name.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
-    (user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase()))
-  );
+
+  // Sorting
+  if (sortByField.value) {
+    filtered = [...filtered].sort((a, b) => {
+      const field = sortByField.value as keyof User;
+      const valueA = a[field];
+      const valueB = b[field];
+
+      // Numeric comparison for ID
+      if (field === 'id') {
+        return sortDirection.value === 'asc'
+          ? Number(valueA) - Number(valueB)
+          : Number(valueB) - Number(valueA);
+      }
+
+      // Handle date comparison
+      if (field === 'dateJoined') {
+        const dateA = new Date(valueA).getTime();
+        const dateB = new Date(valueB).getTime();
+        return sortDirection.value === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+
+      // String comparison for other fields
+      return sortDirection.value === 'asc'
+        ? String(valueA).localeCompare(String(valueB))
+        : String(valueB).localeCompare(String(valueA));
+    });
+  }
+
+  return filtered;
 });
+
+const sortBy = (field: keyof User) => {
+  if (sortByField.value === field) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+  } else {
+    // Set new sort field and default to ascending
+    sortByField.value = field;
+    sortDirection.value = 'asc';
+  }
+};
 
 const totalUsers = computed(() => filteredData.value.length);
 const totalPages = computed(() => Math.ceil(totalUsers.value / rowsPerPage));
-// const totalPages = computed(() => Math.ceil(filteredData.value.length / rowsPerPage));
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * rowsPerPage;
@@ -168,7 +223,6 @@ const deleteMessage = ref('');
 const openDeleteDialog = (user: User) => {
   selectedUserForDelete.value = user;
   deleteMessage.value = t('dialog.deleteMessage', { name: user.name });
-  // deleteMessage.value = `Are you sure you want to delete ${user.name}?`;
   deleteDialogOpen.value = true;
 };
 
