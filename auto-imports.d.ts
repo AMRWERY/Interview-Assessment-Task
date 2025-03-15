@@ -94,7 +94,4 @@ declare global {
   // @ts-ignore
   export type { RouteLocationRaw } from 'vue-router'
   import('vue-router')
-  // @ts-ignore
-  export type { User } from './src/stores/usersStore'
-  import('./src/stores/usersStore')
 }

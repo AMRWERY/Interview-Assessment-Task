@@ -10,7 +10,8 @@
     "role": "Role",
     "email": "Email",
     "no_results_found": "No results found.",
-    "search_by_name_role_or_status": "Search by name, role or status..."
+    "search_by_name_role_or_status": "Search by name, role or status...",
+    "edit": "Edit"
   },
   "pagiation": {
     "previous": "Previous",
@@ -21,5 +22,13 @@
     "page_not_found": "Page not found",
     "the_page_you_are_looking_for_does_not_exist": "The page you’re looking for doesn’t exist.",
     "go_home": "Go Home"
+  },
+  "dialog": {
+    "edit_user": "Edit User",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "cancel": "Cancel",
+    "update": "Update"
   }
 }
