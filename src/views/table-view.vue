@@ -10,34 +10,49 @@
 
       <!-- Responsive Table Wrapper -->
       <div class="overflow-x-auto rounded shadow dark:bg-[#181a1b]">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead class="bg-gray-50 dark:bg-[#181a1b]">
-            <tr>
-              <th
-                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                {{ $t('table.id') }}
-              </th>
-              <th
-                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                {{ $t('table.name') }}
-              </th>
-              <th
-                class="px-4 py-2 text-xs font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
-                {{ $t('table.email') }}
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-gray-200 dark:divide-gray-700">
-            <tr v-for="item in paginatedData" :key="item.id">
-              <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ item.id }}</td>
-              <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ item.name }}</td>
-              <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ item.email }}</td>
-            </tr>
-            <tr v-if="paginatedData.length === 0">
-              <td colspan="3" class="px-4 py-2 text-center">{{ $t('table.no_results_found') }}</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <!-- skeleton-table component -->
+        <template v-if="loading">
+          <skeleton-table />
+        </template>
+
+        <template v-else>
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-[#181a1b]">
+              <tr>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                  {{ $t('table.id') }}
+                </th>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                  {{ $t('table.name') }}
+                </th>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                  {{ $t('table.role') }}
+                </th>
+                <th
+                  class="px-4 py-2 text-sm font-medium tracking-wider text-gray-500 capitalize text-start dark:text-gray-100">
+                  {{ $t('table.email') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-gray-200 dark:divide-gray-700">
+              <tr v-for="user in paginatedData" :key="user.id">
+                <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.id }}</td>
+                <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.name }}</td>
+                <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.role }}</td>
+                <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.email }}</td>
+              </tr>
+
+              <tr v-if="!loading && paginatedData.length === 0">
+                <td colspan="3" class="px-4 py-2 font-semibold text-center text-gray-800 dark:text-gray-200">{{
+                  $t('table.no_results_found') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
       </div>
 
       <!-- Pagination Controls -->
@@ -48,38 +63,33 @@
 </template>
 
 <script setup lang="ts">
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { onMounted, ref, computed, watch } from 'vue';
+import { useMockApiService } from '@/services/mockApiService';
 
-// Sample data: an array of 50 users
-const data = ref<User[]>([]);
-for (let i = 1; i <= 50; i++) {
-  data.value.push({
-    id: i,
-    name: `User ${i}`,
-    email: `user${i}@example.com`
-  });
-}
+const { users, loading, error, fetchUsers, addUser, removeUser } = useMockApiService();
+
+onMounted(() => {
+  fetchUsers();
+});
+
+const createNewUser = () => {
+  addUser({ name: "New User", email: "new@example.com", role: "User" });
+};
 
 const searchQuery = ref('');
 const currentPage = ref(1);
 const rowsPerPage = 10;
 
-// Computed property to filter data based on search query
 const filteredData = computed(() => {
   if (!searchQuery.value.trim()) {
-    return data.value;
+    return users.value;
   }
-  return data.value.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return users.value.filter(user =>
+    (user.name && user.name.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+    (user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase()))
   );
 });
 
-// Total number of pages computed from the filtered data
 const totalPages = computed(() => Math.ceil(filteredData.value.length / rowsPerPage));
 
 // Computed property to slice the filtered data for the current page
@@ -92,17 +102,4 @@ const paginatedData = computed(() => {
 watch(searchQuery, () => {
   currentPage.value = 1;
 });
-
-// Functions to navigate between pages
-function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-}
-
-function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-}
 </script>

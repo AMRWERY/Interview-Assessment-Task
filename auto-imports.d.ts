@@ -80,6 +80,7 @@ declare global {
   const useSlots: typeof import('vue')['useSlots']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useThemeStore: typeof import('./src/stores/themeStore')['useThemeStore']
+  const useUserStore: typeof import('./src/stores/usersStore')['useUserStore']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -93,4 +94,7 @@ declare global {
   // @ts-ignore
   export type { RouteLocationRaw } from 'vue-router'
   import('vue-router')
+  // @ts-ignore
+  export type { User } from './src/stores/usersStore'
+  import('./src/stores/usersStore')
 }

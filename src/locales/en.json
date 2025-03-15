@@ -7,6 +7,7 @@
     "users_table": "Users Table",
     "id": "ID",
     "name": "Name",
+    "role": "Role",
     "email": "Email",
     "no_results_found": "No results found.",
     "search_by_name_role_or_status": "Search by name, role or status..."
