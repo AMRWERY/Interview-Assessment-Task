@@ -26,6 +26,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n'
+import { useLocaleStore } from '@/stores/localeStore';
+
 const { locale } = useI18n();
 const localeStore = useLocaleStore();
 
