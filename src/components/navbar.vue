@@ -37,7 +37,7 @@ onMounted(() => {
     locale.value = localeStore.locale;
 });
 
-const setLocale = (value) => {
+const setLocale = (value: string) => {
     locale.value = value;
     localeStore.updateLocale(value);
 };
