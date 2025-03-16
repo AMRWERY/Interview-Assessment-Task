@@ -26,6 +26,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router';
 import { useThemeStore } from '@/stores/themeStore.ts'
 import { useLocaleStore } from './stores/localeStore';
+import { useAuth } from '@/composables/useAuth';
 
 const { locale } = useI18n();
 const localeStore = useLocaleStore();
@@ -48,6 +49,10 @@ const route = useRoute();
 const showNavbar = computed(() => {
   return !route.meta.hideNavbar;
 })
+
+const auth = useAuth();
+// Check token validity every minute
+setInterval(() => auth.validateToken(), 60000);
 </script>
 
 <style>

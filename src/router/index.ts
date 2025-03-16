@@ -7,11 +7,11 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: "/",
       redirect: () => {
         const auth = useAuth();
-        return auth.currentUser.value ? '/table-view' : '/login';
-      }
+        return auth.currentUser.value ? "/table-view" : "/login";
+      },
     },
     {
       path: "/login",
@@ -78,6 +78,10 @@ router.afterEach((to) => {
 
 router.beforeEach((to, from, next) => {
   const auth = useAuth();
+
+  if (!auth.validateToken() && to.meta.requiresAuth) {
+    return next("/login");
+  }
 
   // Route requires authentication
   if (to.meta.requiresAuth && !auth.currentUser.value) {

@@ -38,7 +38,7 @@
                     </div>
                     <div>
                         <label class="block mb-1 text-gray-700 dark:text-gray-300">{{ $t('dialog.date_joined')
-                            }}</label>
+                        }}</label>
                         <input type="date" v-model="editedUser.dateJoined" :disabled="props.viewOnly"
                             class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200" />
                     </div>

@@ -28,6 +28,21 @@ const simulateLatency = (fn: () => any) => {
   });
 };
 
+export const verifyToken = (token: string) => {
+  return simulateLatency(() => {
+    try {
+      const [email, expires] = atob(token).split(":");
+      return {
+        valid: Date.now() < parseInt(expires),
+        user: users.find((u) => u.email === email),
+        expiresIn: parseInt(expires) - Date.now(),
+      };
+    } catch {
+      return { valid: false };
+    }
+  });
+};
+
 // Get all users with pagination and filtering
 export const getUsers = (
   page: number = 1,

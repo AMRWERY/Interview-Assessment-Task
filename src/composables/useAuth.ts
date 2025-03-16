@@ -32,19 +32,67 @@ const allowedUsers: AllowedUser[] = [
   },
 ];
 
+interface AuthData {
+  user: User;
+  token: string;
+  expires: number;
+}
+
 export const useAuth = () => {
   const currentUser = ref<User | null>(null);
 
+  const generateToken = (email: string): string => {
+    // Mock token generation (use JWT in real app)
+    return btoa(`${email}:${Date.now() + 300000}`); // 5 minutes expiration
+  };
+
   const login = (email: string, password: string) => {
-    const user = allowedUsers.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
-      const { password, ...safeUser } = user;
+    try {
+      const user = allowedUsers.find(
+        (u) => u.email === email && u.password === password
+      );
+
+      if (!user) return null;
+
+      const { password: _, ...safeUser } = user;
+      const token = generateToken(email);
+
+      const authData: AuthData = {
+        user: safeUser,
+        token,
+        expires: Date.now() + 300000, // 5 minutes
+      };
+
+      localStorage.setItem("auth", JSON.stringify(authData));
       currentUser.value = safeUser;
-      localStorage.setItem("currentUser", JSON.stringify(safeUser));
+      return safeUser;
+    } catch (error) {
+      console.error("Login failed:", error);
+      return null;
     }
-    return user;
+  };
+
+  const validateToken = () => {
+    const authString = localStorage.getItem("auth");
+    if (!authString) return false;
+
+    const authData: AuthData = JSON.parse(authString);
+    if (Date.now() > authData.expires) {
+      logout();
+      return false;
+    }
+    // Verify mock token (replace with real validation in production)
+    const [email, expires] = atob(authData.token).split(":");
+    if (
+      email !== authData.user.email ||
+      parseInt(expires) !== authData.expires
+    ) {
+      logout();
+      return false;
+    }
+
+    currentUser.value = authData.user;
+    return true;
   };
 
   const logout = () => {
@@ -60,6 +108,7 @@ export const useAuth = () => {
   return {
     currentUser,
     login,
+    validateToken,
     logout,
   };
 };
