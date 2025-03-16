@@ -7,6 +7,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: () => {
+        const auth = useAuth();
+        return auth.currentUser.value ? '/table-view' : '/login';
+      }
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("@/views/login.vue"),
@@ -32,7 +39,7 @@ const router = createRouter({
       component: () => import("@/views/add-new-user.vue"),
       meta: {
         title: "meta.add_new_user",
-        equiresAuth: true,
+        requiresAuth: true,
         allowedRoles: ["Admin", "Manager"],
       },
     },
