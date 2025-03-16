@@ -30,8 +30,9 @@
                         </label>
                         <select id="role" v-model="role"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
-                            <option value="Admin">{{ $t('form.admin') }}</option>
-                            <option value="User">{{ $t('form.manager') }}</option>
+                            <option value="Admin" v-if="props.currentUserRole !== 'Manager'">{{ $t('form.admin') }}
+                            </option>
+                            <option value="Manager">{{ $t('form.manager') }}</option>
                             <option value="User">{{ $t('form.viewer') }}</option>
                         </select>
                         <span v-if="errors.role" class="text-sm text-red-500">{{ $t(errors.role) }}</span>
@@ -61,6 +62,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMockApiService } from '@/services/mockApiService';
 import { useValidation } from '@/composables/useValidation';
@@ -83,6 +85,12 @@ const errors = ref({
 });
 
 const { validateRequired } = useValidation();
+
+const props = defineProps({
+    currentUserRole: {
+        type: String as PropType<'Admin' | 'Manager' | 'Viewer'>,
+    }
+});
 
 function submitForm() {
     errors.value.name = validateRequired(name.value, 'validation.required.name') || '';
@@ -111,7 +119,7 @@ function submitForm() {
             isAdding.value = false;
             name.value = '';
             email.value = '';
-            role.value = 'User';
+            role.value = props.currentUserRole === 'Admin' ? 'Admin' : 'Manager';
             dateJoined.value = new Date().toISOString().slice(0, 10);
         })
 }

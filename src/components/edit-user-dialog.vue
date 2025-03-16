@@ -29,7 +29,7 @@
                         <select v-if="!viewOnly && (currentUserRole === 'Admin' || currentUserRole === 'Manager')"
                             v-model="editedUser.role"
                             class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200">
-                            <option value="Admin">{{ $t('form.admin') }}</option>
+                            <option value="Admin" v-if="currentUserRole != 'Manager'">{{ $t('form.admin') }}</option>
                             <option value="Manager">{{ $t('form.manager') }}</option>
                             <option value="Viewer">{{ $t('form.viewer') }}</option>
                         </select>
@@ -63,7 +63,6 @@ import { reactive, watch } from 'vue';
 import type { PropType } from 'vue';
 import type { User } from "@/user.model";
 
-// const props = defineProps<{ user: User | null }>();
 const props = defineProps({
     user: {
         type: Object as PropType<User | null>,
