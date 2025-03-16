@@ -63,7 +63,7 @@ export const useAuth = () => {
         expires: Date.now() + 300000, // 5 minutes
       };
 
-      localStorage.setItem("auth", JSON.stringify(authData));
+      localStorage.setItem("currentUser", JSON.stringify(authData));
       currentUser.value = safeUser;
       return safeUser;
     } catch (error) {
@@ -73,7 +73,7 @@ export const useAuth = () => {
   };
 
   const validateToken = () => {
-    const authString = localStorage.getItem("auth");
+    const authString = localStorage.getItem("currentUser");
     if (!authString) return false;
 
     const authData: AuthData = JSON.parse(authString);
@@ -100,10 +100,19 @@ export const useAuth = () => {
     localStorage.removeItem("currentUser");
   };
 
-  const storedUser = localStorage.getItem("currentUser");
-  if (storedUser) {
-    currentUser.value = JSON.parse(storedUser);
-  }
+  // Initialize auth state
+  const initializeAuth = () => {
+    const authString = localStorage.getItem("currentUser");
+    if (authString) {
+      try {
+        const authData: AuthData = JSON.parse(authString);
+        currentUser.value = authData.user;
+      } catch (error) {
+        logout();
+      }
+    }
+  };
+  initializeAuth();
 
   return {
     currentUser,

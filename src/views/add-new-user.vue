@@ -57,6 +57,13 @@
                 </form>
             </div>
         </div>
+
+        <div class="fixed z-50 pointer-events-none bottom-5 start-5 w-96">
+            <div class="pointer-events-auto">
+                <dynamic-toast v-if="showToast" :message="toastMessage" :toastType="toastType" :duration="5000"
+                    :toastIcon="toastIcon" @toastClosed="showToast = false" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -64,11 +71,14 @@
 import { ref } from 'vue';
 import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useMockApiService } from '@/services/mockApiService';
 import { useValidation } from '@/composables/useValidation';
+import { useToast } from '@/composables/useToast';
 
 const { addUser } = useMockApiService();
 const router = useRouter();
+const { t } = useI18n()
 
 const name = ref('');
 const email = ref('');
@@ -92,6 +102,8 @@ const props = defineProps({
     }
 });
 
+const { showToast, toastMessage, toastType, toastIcon, triggerToast } = useToast();
+
 function submitForm() {
     errors.value.name = validateRequired(name.value, 'validation.required.name') || '';
     errors.value.email = validateRequired(email.value, 'validation.required.email') || '';
@@ -107,13 +119,23 @@ function submitForm() {
     };
     addUser(newUser)
         .then(() => {
+            triggerToast({
+                message: t('toast.success_add_new_user'),
+                type: 'success',
+                icon: 'material-symbols:check-circle-rounded'
+            });
             return new Promise(resolve => setTimeout(resolve, 3000));
         })
         .then(() => {
             router.push('/table-view');
         })
         .catch((error) => {
-            console.error(error)
+            // console.error(error)
+            triggerToast({
+                message: t('toast.faield_add_new_user'),
+                type: 'warning',
+                icon: 'material-symbols:warning-rounded'
+            });
         })
         .finally(() => {
             isAdding.value = false;

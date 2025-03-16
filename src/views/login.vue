@@ -36,6 +36,14 @@
                 </div>
             </form>
         </div>
+
+        <!-- dynamic-toast component -->
+        <div class="fixed z-50 pointer-events-none bottom-5 start-5 w-96">
+            <div class="pointer-events-auto">
+                <dynamic-toast v-if="showToast" :message="toastMessage" :toastType="toastType" :duration="5000"
+                    :toastIcon="toastIcon" @toastClosed="showToast = false" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -45,11 +53,11 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
 import { useValidation } from '@/composables/useValidation';
+import { useToast } from '@/composables/useToast';
 
 const { t } = useI18n()
 const email = ref('');
 const password = ref('');
-const error = ref('');
 const auth = useAuth();
 const router = useRouter();
 const isAdding = ref(false);
@@ -60,6 +68,8 @@ const errors = ref({
 });
 
 const { validateRequired } = useValidation();
+
+const { showToast, toastMessage, toastType, toastIcon, triggerToast } = useToast();
 
 const handleLogin = async () => {
     errors.value = { email: '', password: '' };
@@ -75,10 +85,18 @@ const handleLogin = async () => {
                 isAdding.value = false;
             }, 2000);
         } else {
-            error.value = 'Invalid credentials';
+            triggerToast({
+                message: t('toast.invalid_credentials'),
+                type: 'warning',
+                icon: 'material-symbols:warning-rounded'
+            });
         }
     } catch (err) {
-        error.value = 'Login failed';
+        triggerToast({
+            message: t('toast.login_failed'),
+            type: 'warning',
+            icon: 'material-symbols:warning-rounded'
+        });
     }
 };
 </script>

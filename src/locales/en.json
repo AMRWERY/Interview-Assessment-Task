@@ -67,5 +67,11 @@
       "role": "Role is required",
       "date_joined": "Join date is required"
     }
+  },
+  "toast": {
+    "invalid_credentials": "Invalid Credentials",
+    "login_failed": "Login Failed",
+    "success_add_new_user": "Success add new User",
+    "faield_add_new_user": "Failed add new User"
   }
 }

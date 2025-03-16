@@ -67,5 +67,11 @@
       "role": "الدور مطلوب",
       "date_joined": "تاريخ الانضمام مطلوب"
     }
+  },
+  "toast": {
+    "invalid_credentials": "البيانات غير صحيحه",
+    "login_failed": "فشل تسجيل الدخول",
+    "success_add_new_user": "تمت إضافة مستخدم جديد بنجاح",
+    "faield_add_new_user": "فشل إضافة مستخدم جديد"
   }
 }

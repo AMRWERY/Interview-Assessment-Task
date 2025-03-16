@@ -81,7 +81,9 @@ declare global {
   const useSlots: typeof import('vue')['useSlots']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useThemeStore: typeof import('./src/stores/themeStore')['useThemeStore']
+  const useToast: typeof import('./src/composables/useToast')['useToast']
   const useUserStore: typeof import('./src/stores/usersStore')['useUserStore']
+  const useValidation: typeof import('./src/composables/useValidation')['useValidation']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -95,4 +97,7 @@ declare global {
   // @ts-ignore
   export type { RouteLocationRaw } from 'vue-router'
   import('vue-router')
+  // @ts-ignore
+  export type { ToastOptions } from './src/composables/useToast'
+  import('./src/composables/useToast')
 }
