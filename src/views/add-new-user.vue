@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex items-center justify-center min-h-screen">   
+        <div class="flex items-center justify-center min-h-screen">
             <div class="w-full max-w-lg p-4 mx-auto bg-white rounded shadow dark:bg-gray-800">
                 <h2 class="mb-4 text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
                     {{ $t('form.add_new_user') }}
@@ -13,7 +13,7 @@
                         <input id="name" type="text" v-model="name" required
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600" />
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="email" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.email') }}
@@ -21,7 +21,7 @@
                         <input id="email" type="email" v-model="email" required
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600" />
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="role" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.role') }}
@@ -33,7 +33,7 @@
                             <option value="User">{{ $t('form.viewer') }}</option>
                         </select>
                     </div>
-    
+
                     <div class="mb-4">
                         <label for="dateJoined" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.date_joined') }}
@@ -80,10 +80,10 @@ function submitForm() {
     };
     addUser(newUser)
         .then(() => {
-            return new Promise(resolve => setTimeout(resolve, 3000)); // 3-second delay
+            return new Promise(resolve => setTimeout(resolve, 3000));
         })
         .then(() => {
-            router.push('/');
+            router.push('/table-view');
         })
         .catch((error) => {
             console.error(error)

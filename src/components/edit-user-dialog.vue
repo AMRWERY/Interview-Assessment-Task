@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, reactive, watch } from 'vue';
+import { reactive, watch } from 'vue';
 import type { User } from "@/user.model";
 
 const props = defineProps<{ user: User | null }>();
