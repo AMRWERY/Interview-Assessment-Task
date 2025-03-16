@@ -117,15 +117,14 @@ function submitForm() {
         role: role.value,
         dateJoined: dateJoined.value,
     };
-    addUser(newUser)
-        .then(() => {
-            triggerToast({
-                message: t('toast.success_add_new_user'),
-                type: 'success',
-                icon: 'material-symbols:check-circle-rounded'
-            });
-            return new Promise(resolve => setTimeout(resolve, 3000));
-        })
+    addUser(newUser)?.then(() => {
+        triggerToast({
+            message: t('toast.success_add_new_user'),
+            type: 'success',
+            icon: 'material-symbols:check-circle-rounded'
+        });
+        return new Promise(resolve => setTimeout(resolve, 3000));
+    })
         .then(() => {
             router.push('/table-view');
         })
