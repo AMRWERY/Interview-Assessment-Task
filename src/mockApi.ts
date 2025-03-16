@@ -36,7 +36,7 @@ export const getUsers = (
 ) => {
   return simulateLatency(() => {
     let filteredUsers = [...users];
-    if (role) filteredUsers = filteredUsers.filter(u => u.role === role);
+    if (role) filteredUsers = filteredUsers.filter((u) => u.role === role);
     filteredUsers.sort((a, b) => b.id - a.id);
     const total = filteredUsers.length;
     const start = (page - 1) * limit;
@@ -48,22 +48,6 @@ export const getUsers = (
     } as UsersResponse;
   });
 };
-// export const getUsers = (
-//   page: number = 1,
-//   limit: number = 10,
-//   role?: string
-// ) => {
-//   return simulateLatency(() => {
-//     let filteredUsers = [...users]; // Create a copy to avoid mutating the original array
-//     if (role) {
-//       filteredUsers = filteredUsers.filter((u) => u.role === role);
-//     }
-//     // Sort users by ID descending (newest first)
-//     filteredUsers.sort((a, b) => b.id - a.id);
-//     const start = (page - 1) * limit;
-//     return filteredUsers.slice(start, start + limit);
-//   });
-// };
 
 // Get a specific user by ID
 export const getUserById = (id: number) => {

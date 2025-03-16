@@ -73,9 +73,11 @@
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.role }}</td>
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.email }}</td>
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ formatDate(user.dateJoined) }}</td>
-                <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)">{{
-                  $t('table.edit') }}</td>
-                <td class="py-2 text-red-600 cursor-pointer dark:text-red-300" @click="openDeleteDialog(user)">
+                <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)"
+                  v-if="canEdit">{{
+                    $t('table.edit') }}</td>
+                <td class="py-2 text-red-600 cursor-pointer dark:text-red-300" @click="openDeleteDialog(user)"
+                  v-if="canDelete">
                   <iconify-icon icon="material-symbols:delete-forever" width="24" height="24"></iconify-icon>
                 </td>
               </tr>
@@ -103,9 +105,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { User } from '@/user.model';
 import { useMockApiService } from '@/services/mockApiService';
-import { useI18n } from 'vue-i18n';
+import { useAuth } from '@/composables/useAuth';
 
 const { users, loading, fetchUsers, removeUser } = useMockApiService();
 
@@ -128,7 +131,8 @@ const filteredData = computed(() => {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(user =>
       (user.name && user.name.toLowerCase().includes(query)) ||
-      (user.email && user.email.toLowerCase().includes(query))
+      (user.email && user.email.toLowerCase().includes(query)) ||
+      (user.role && user.role.toLowerCase().includes(query))
     );
   }
 
@@ -237,4 +241,13 @@ const confirmDelete = async () => {
   }
   deleteDialogOpen.value = false;
 };
+
+const auth = useAuth();
+const canEdit = computed(() =>
+  ['Admin', 'Manager'].includes(auth.currentUser.value?.role || '')
+);
+
+const canDelete = computed(() =>
+  auth.currentUser.value?.role === 'Admin'
+);
 </script>

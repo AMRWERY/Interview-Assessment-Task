@@ -3,7 +3,8 @@
     "table_view": "Table view",
     "add_new_user": "Add new User",
     "page_not_found": "Page not found 😄",
-    "login": "Login"
+    "login": "Login",
+    "unauthorized": "Unauthorized"
   },
   "table": {
     "users_table": "Users Table",
@@ -25,7 +26,9 @@
     "error_404": "Error 404",
     "page_not_found": "Page not found",
     "the_page_you_are_looking_for_does_not_exist": "The page you’re looking for doesn’t exist.",
-    "go_home": "Go Home"
+    "go_home": "Go Home",
+    "unauthorized_access": "Unauthorized Access",
+    "you_do_not_have_permission_to_view_this_page": "You don't have permission to view this page."
   },
   "dialog": {
     "edit_user": "Edit User",
