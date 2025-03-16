@@ -22,6 +22,14 @@ const allowedUsers: AllowedUser[] = [
     dateJoined: new Date().toISOString(),
     password: "1234567",
   },
+  {
+    id: 3,
+    name: "Viewer",
+    email: "viewer@example.com",
+    role: "Viewer",
+    dateJoined: new Date().toISOString(),
+    password: "1234567",
+  },
 ];
 
 export const useAuth = () => {

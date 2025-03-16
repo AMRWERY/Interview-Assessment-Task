@@ -1,7 +1,7 @@
 <template>
     <div>
-        <nav class="flex items-center h-10 shadow-xl px-7">
-            <div class="flex items-center gap-4">
+        <nav class="flex items-center h-10 shadow-xl px-7 dark:shadow-transparent">
+            <div class="flex items-center gap-5">
                 <router-link to="" role="button" @click="handleLogout"
                     class="relative flex text-gray-700 rounded-full cursor-pointer dark:text-gray-200">
                     <span class="absolute -inset-1.5" />
@@ -10,13 +10,13 @@
                 </router-link>
 
                 <div class="flex">
-                    <router-link to="" class="font-semibold text-gray-700 me-4 dark:text-gray-200" role="button"
+                    <router-link to="" class="font-semibold text-gray-700 dark:text-gray-200" role="button"
                         v-if="localeStore.isRTL">
                         <span class="w-5" @click="setLocale('en')">
                             En
                         </span>
                     </router-link>
-                    <router-link to="" class="font-semibold text-gray-700 me-4 dark:text-gray-200" role="button" v-else>
+                    <router-link to="" class="font-semibold text-gray-700 dark:text-gray-200" role="button" v-else>
                         <span class="w-5" @click="setLocale('ar')">
                             العربية
                         </span>

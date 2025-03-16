@@ -23,7 +23,7 @@ const router = createRouter({
       meta: {
         title: "meta.table_view",
         requiresAuth: true,
-        allowedRoles: ["Admin", "Manager"],
+        allowedRoles: ["Admin", "Manager", "Viewer"],
       },
     },
     {
@@ -75,14 +75,6 @@ router.beforeEach((to, from, next) => {
   // Route requires authentication
   if (to.meta.requiresAuth && !auth.currentUser.value) {
     return next("/login");
-  }
-
-  // Check role-based permissions
-  if (to.meta.allowedRoles) {
-    const userRole = auth.currentUser.value?.role;
-    if (!userRole || !(to.meta.allowedRoles as string[]).includes(userRole)) {
-      return next("/unauthorized"); // Create this route
-    }
   }
 
   next();

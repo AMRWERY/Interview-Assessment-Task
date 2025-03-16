@@ -9,7 +9,7 @@
         <!-- Search Input -->
         <search-input v-model="searchQuery" />
 
-        <router-link to="/add-new-user" type="button"
+        <router-link to="/add-new-user" type="button" v-if="canAddUser"
           class="flex items-center justify-center px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
           <iconify-icon icon="material-symbols:add" width="20" height="20"></iconify-icon>
           <span class="ms-1">{{ $t('table.add_user') }}</span>
@@ -74,8 +74,9 @@
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ user.email }}</td>
                 <td class="px-4 py-2 whitespace-nowrap dark:text-gray-200">{{ formatDate(user.dateJoined) }}</td>
                 <td class="py-2 text-blue-600 cursor-pointer dark:text-blue-300" @click="openDialog(user)"
-                  v-if="canEdit">{{
-                    $t('table.edit') }}</td>
+                  v-if="canViewOrEdit">
+                  {{ currentUserRole === 'Viewer' ? $t('table.view') : $t('table.edit') }}
+                </td>
                 <td class="py-2 text-red-600 cursor-pointer dark:text-red-300" @click="openDeleteDialog(user)"
                   v-if="canDelete">
                   <iconify-icon icon="material-symbols:delete-forever" width="24" height="24"></iconify-icon>
@@ -96,7 +97,7 @@
     </div>
 
     <!-- edit-user-dialog component -->
-    <edit-user-dialog v-if="dialogOpen" :user="selectedUser" @close="closeDialog" @save="handleUserUpdate" />
+    <edit-user-dialog v-if="dialogOpen" :user="selectedUser" @close="closeDialog" @save="handleUserUpdate" :viewOnly="viewOnlyMode" />
 
     <!-- delete-user-dialog component -->
     <delete-user-dialog v-model="deleteDialogOpen" :message="deleteMessage" @confirm="confirmDelete" />
@@ -191,10 +192,12 @@ watch(searchQuery, () => {
 
 const dialogOpen = ref(false);
 const selectedUser = ref(null);
+const viewOnlyMode = ref(false);
 
 // Opens the dialog and sets the selected user
 function openDialog(user: any) {  // Replace "any" with your User type if available
   selectedUser.value = user;
+  viewOnlyMode.value = auth.currentUser.value?.role === 'Viewer';
   dialogOpen.value = true;
 }
 
@@ -234,7 +237,7 @@ const confirmDelete = async () => {
   if (selectedUserForDelete.value) {
     try {
       await removeUser(selectedUserForDelete.value.id);
-      fetchUsers(1, 1000); // Refresh the user list
+      fetchUsers(1, 1000);
     } catch (error) {
       console.error('Delete failed:', error);
     }
@@ -243,11 +246,22 @@ const confirmDelete = async () => {
 };
 
 const auth = useAuth();
-const canEdit = computed(() =>
-  ['Admin', 'Manager'].includes(auth.currentUser.value?.role || '')
-);
+
+// const canEdit = computed(() =>
+//   ['Admin', 'Manager'].includes(auth.currentUser.value?.role || '')
+// );
 
 const canDelete = computed(() =>
   auth.currentUser.value?.role === 'Admin'
 );
+
+const canAddUser = computed(() => 
+  ['Admin', 'Manager'].includes(auth.currentUser.value?.role || '')
+);
+
+const canViewOrEdit = computed(() =>
+  ['Admin', 'Manager', 'Viewer'].includes(auth.currentUser.value?.role || '')
+);
+
+const currentUserRole = computed(() => auth.currentUser.value?.role || '')
 </script>
