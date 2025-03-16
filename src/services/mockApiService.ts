@@ -8,6 +8,7 @@ import {
   getRoles,
 } from "@/mockApi";
 import type { User, Role, UsersResponse } from "@/user.model";
+import { useAuth } from "@/composables/useAuth";
 
 export function useMockApiService() {
   const users = ref<User[]>([]);
@@ -15,10 +16,16 @@ export function useMockApiService() {
   const totalUsers = ref(0);
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const auth = useAuth();
 
   const fetchUsers = (page = 1, limit = 10, role?: string) => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     getUsers(page, limit, role)
       .then((result) => {
         const response = result as UsersResponse;
@@ -36,6 +43,11 @@ export function useMockApiService() {
   const fetchUserById = (id: number) => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     return getUserById(id)
       .then((result) => {
         return result;
@@ -52,6 +64,11 @@ export function useMockApiService() {
   const addUser = (user: Omit<User, "id">) => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     return createUser(user)
       .then((newUser) => {
         users.value.push(newUser as User);
@@ -67,27 +84,17 @@ export function useMockApiService() {
       });
   };
 
-  // const addUser = (user: { id: number, name: string; email: string; role: string; dateJoined: string }) => {
-  //   loading.value = true;
-  //   error.value = null;
-  //   createUser({ ...user, dateJoined: new Date().toISOString() })
-  //     .then((newUser) => {
-  //       users.value.push(newUser as User);
-  //     })
-  //     .catch((err) => {
-  //       error.value = err as string;
-  //     })
-  //     .finally(() => {
-  //       loading.value = false;
-  //     });
-  // };
-
   const editUser = (
     id: number,
     data: Partial<{ name: string; email: string; role: string }>
   ) => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     updateUser(id, data)
       .then((updatedUser) => {
         if (updatedUser) {
@@ -108,6 +115,11 @@ export function useMockApiService() {
   const removeUser = (id: number) => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     deleteUser(id)
       .then((deletedUser) => {
         if (deletedUser) {
@@ -125,6 +137,11 @@ export function useMockApiService() {
   const fetchRoles = () => {
     loading.value = true;
     error.value = null;
+    if (!auth.validateToken()) {
+      loading.value = false;
+      auth.logout();
+      return;
+    }
     getRoles()
       .then((result) => {
         roles.value = result as Role[];

@@ -49,10 +49,6 @@ const route = useRoute();
 const showNavbar = computed(() => {
   return !route.meta.hideNavbar;
 })
-
-const auth = useAuth();
-// Check token validity every minute
-setInterval(() => auth.validateToken(), 60000);
 </script>
 
 <style>
