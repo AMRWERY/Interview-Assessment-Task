@@ -19,9 +19,17 @@
                     <div>
                         <label class='block mb-2 text-sm font-medium text-slate-800 dark:text-slate-200'>{{
                             $t('form.password') }}</label>
-                        <input name="password" type="password"
-                            class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-300"
-                            :placeholder="t('form.enter_password')" v-model="password" />
+                        <div class="relative">
+                            <input name="password" :type="passwordType"
+                                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-300"
+                                :placeholder="t('form.enter_password')" v-model="password" />
+                            <!-- Toggle Button -->
+                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3"
+                                @click="togglePassword">
+                                <iconify-icon :icon="passwordVisible ? 'mdi:eye-off-outline' : 'mdi:eye-outline'"
+                                    width="24" height="24" class="text-gray-400 dark:text-gray-400"></iconify-icon>
+                            </button>
+                        </div>
                         <span v-if="errors.password" class="text-sm text-red-500">{{ $t(errors.password) }}</span>
                     </div>
                 </div>
@@ -48,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
@@ -99,4 +107,11 @@ const handleLogin = async () => {
         });
     }
 };
+
+const passwordVisible = ref(false);
+const togglePassword = () => {
+    passwordVisible.value = !passwordVisible.value;
+};
+
+const passwordType = computed(() => (passwordVisible.value ? 'text' : 'password'));
 </script>
