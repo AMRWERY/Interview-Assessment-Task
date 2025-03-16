@@ -26,7 +26,14 @@
                     </div>
                     <div>
                         <label class="block mb-1 text-gray-700 dark:text-gray-300">{{ $t('dialog.role') }}</label>
-                        <input type="text" v-model="editedUser.role" :disabled="props.viewOnly"
+                        <select v-if="!viewOnly && (currentUserRole === 'Admin' || currentUserRole === 'Manager')"
+                            v-model="editedUser.role"
+                            class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200">
+                            <option value="Admin">{{ $t('form.admin') }}</option>
+                            <option value="Manager">{{ $t('form.manager') }}</option>
+                            <option value="Viewer">{{ $t('form.viewer') }}</option>
+                        </select>
+                        <input v-else type="text" v-model="editedUser.role" disabled
                             class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200" />
                     </div>
                     <div>
@@ -66,6 +73,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    currentUserRole: {
+        type: String as PropType<'Admin' | 'Manager' | 'Viewer'>,
+        required: true
+    }
 });
 
 const emit = defineEmits<{

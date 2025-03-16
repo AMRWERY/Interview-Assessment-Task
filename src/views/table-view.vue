@@ -98,7 +98,7 @@
 
     <!-- edit-user-dialog component -->
     <edit-user-dialog v-if="dialogOpen" :user="selectedUser" @close="closeDialog" @save="handleUserUpdate"
-      :viewOnly="viewOnlyMode" />
+      :viewOnly="viewOnlyMode" :current-user-role="auth.currentUser.value?.role" />
 
     <!-- delete-user-dialog component -->
     <delete-user-dialog v-model="deleteDialogOpen" :message="deleteMessage" @confirm="confirmDelete" />
@@ -247,10 +247,6 @@ const confirmDelete = async () => {
 };
 
 const auth = useAuth();
-
-// const canEdit = computed(() =>
-//   ['Admin', 'Manager'].includes(auth.currentUser.value?.role || '')
-// );
 
 const canDelete = computed(() =>
   auth.currentUser.value?.role === 'Admin'
