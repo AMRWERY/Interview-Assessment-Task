@@ -11,7 +11,7 @@ const router = createRouter({
       component: () => import("@/views/login.vue"),
       meta: {
         title: "meta.login",
-        // hideNavbar: true
+        hideNavbar: true
       },
     },
     {
