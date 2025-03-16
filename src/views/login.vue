@@ -11,16 +11,18 @@
                     <div>
                         <label class='block mb-2 text-sm font-medium text-slate-800 dark:text-slate-200'>{{
                             $t('form.email') }}</label>
-                        <input name="email" type="email" required
+                        <input name="email" type="email"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-300"
                             :placeholder="t('form.enter_email')" v-model="email" />
+                        <span v-if="errors.email" class="text-sm text-red-500">{{ $t(errors.email) }}</span>
                     </div>
                     <div>
                         <label class='block mb-2 text-sm font-medium text-slate-800 dark:text-slate-200'>{{
                             $t('form.password') }}</label>
-                        <input name="password" type="password" required
+                        <input name="password" type="password"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-300"
                             :placeholder="t('form.enter_password')" v-model="password" />
+                        <span v-if="errors.password" class="text-sm text-red-500">{{ $t(errors.password) }}</span>
                     </div>
                 </div>
 
@@ -40,8 +42,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n';
-import { useAuth } from '@/composables/useAuth';
 import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/useAuth';
+import { useValidation } from '@/composables/useValidation';
 
 const { t } = useI18n()
 const email = ref('');
@@ -51,7 +54,18 @@ const auth = useAuth();
 const router = useRouter();
 const isAdding = ref(false);
 
+const errors = ref({
+    email: '',
+    password: ''
+});
+
+const { validateRequired } = useValidation();
+
 const handleLogin = async () => {
+    errors.value = { email: '', password: '' };
+    errors.value.email = validateRequired(email.value, 'validation.required.email') || '';
+    errors.value.password = validateRequired(password.value, 'validation.required.password') || '';
+    if (errors.value.email || errors.value.password) return;
     try {
         const user = auth.login(email.value, password.value);
         if (user) {

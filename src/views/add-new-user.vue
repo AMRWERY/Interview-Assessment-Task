@@ -10,28 +10,31 @@
                         <label for="name" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.name') }}
                         </label>
-                        <input id="name" type="text" v-model="name" required
+                        <input id="name" type="text" v-model="name"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600" />
+                        <span v-if="errors.name" class="text-sm text-red-500">{{ $t(errors.name) }}</span>
                     </div>
 
                     <div class="mb-4">
                         <label for="email" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.email') }}
                         </label>
-                        <input id="email" type="email" v-model="email" required
+                        <input id="email" type="email" v-model="email"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600" />
+                        <span v-if="errors.email" class="text-sm text-red-500">{{ $t(errors.email) }}</span>
                     </div>
 
                     <div class="mb-4">
                         <label for="role" class="block mb-1 text-gray-700 dark:text-gray-300">
                             {{ $t('form.role') }}
                         </label>
-                        <select id="role" v-model="role" required
+                        <select id="role" v-model="role"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
                             <option value="Admin">{{ $t('form.admin') }}</option>
                             <option value="User">{{ $t('form.manager') }}</option>
                             <option value="User">{{ $t('form.viewer') }}</option>
                         </select>
+                        <span v-if="errors.role" class="text-sm text-red-500">{{ $t(errors.role) }}</span>
                     </div>
 
                     <div class="mb-4">
@@ -40,6 +43,7 @@
                         </label>
                         <input id="dateJoined" type="date" v-model="dateJoined"
                             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600" />
+                        <span v-if="errors.dateJoined" class="text-sm text-red-500">{{ $t(errors.dateJoined) }}</span>
                     </div>
                     <div class="flex justify-end">
                         <button type="submit" :disabled="isAdding"
@@ -57,8 +61,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useMockApiService } from '@/services/mockApiService';
 import { useRouter } from 'vue-router';
+import { useMockApiService } from '@/services/mockApiService';
+import { useValidation } from '@/composables/useValidation';
 
 const { addUser } = useMockApiService();
 const router = useRouter();
@@ -70,7 +75,21 @@ const dateJoined = ref('');
 
 const isAdding = ref(false);
 
+const errors = ref({
+    name: '',
+    email: '',
+    role: '',
+    dateJoined: ''
+});
+
+const { validateRequired } = useValidation();
+
 function submitForm() {
+    errors.value.name = validateRequired(name.value, 'validation.required.name') || '';
+    errors.value.email = validateRequired(email.value, 'validation.required.email') || '';
+    errors.value.role = validateRequired(role.value, 'validation.required.role') || '';
+    errors.value.dateJoined = validateRequired(dateJoined.value, 'validation.required.date_joined') || ''
+    if (Object.values(errors.value).some(error => error)) return;
     isAdding.value = true;
     const newUser = {
         name: name.value,
