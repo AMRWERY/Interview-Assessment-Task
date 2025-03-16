@@ -37,3 +37,16 @@ npm run build
 ```sh
 npm run test:unit
 ```
+
+``` for main users
+(admin) => add & edit & delete
+admin@example.com
+1234567
+
+(manager) => add & edit
+manager@example.com
+1234567
+
+(viewer) => view only
+viewer@example.com
+1234567
