@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import {
   getUsers,
   getUserById,
@@ -11,6 +12,7 @@ import type { User, Role, UsersResponse } from "@/user.model";
 import { useAuth } from "@/composables/useAuth";
 
 export function useMockApiService() {
+  const router = useRouter();
   const users = ref<User[]>([]);
   const roles = ref<Role[]>([]);
   const totalUsers = ref(0);
@@ -24,6 +26,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     getUsers(page, limit, role)
@@ -46,6 +49,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     return getUserById(id)
@@ -67,6 +71,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     return createUser(user)
@@ -93,6 +98,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     updateUser(id, data)
@@ -118,6 +124,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     deleteUser(id)
@@ -140,6 +147,7 @@ export function useMockApiService() {
     if (!auth.validateToken()) {
       loading.value = false;
       auth.logout();
+      router.replace("/unauthorized");
       return;
     }
     getRoles()
