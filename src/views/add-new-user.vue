@@ -104,7 +104,7 @@ const props = defineProps({
 
 const { showToast, toastMessage, toastType, toastIcon, triggerToast } = useToast();
 
-function submitForm() {
+async function submitForm() {
     errors.value.name = validateRequired(name.value, 'validation.required.name') || '';
     errors.value.email = validateRequired(email.value, 'validation.required.email') || '';
     errors.value.role = validateRequired(role.value, 'validation.required.role') || '';
@@ -117,31 +117,28 @@ function submitForm() {
         role: role.value,
         dateJoined: dateJoined.value,
     };
-    addUser(newUser)?.then(() => {
+    try {
+        isAdding.value = true;
+        await addUser(newUser);
         triggerToast({
             message: t('toast.success_add_new_user'),
             type: 'success',
             icon: 'material-symbols:check-circle-rounded'
         });
-        return new Promise(resolve => setTimeout(resolve, 3000));
-    })
-        .then(() => {
-            router.push('/table-view');
-        })
-        .catch((error) => {
-            // console.error(error)
-            triggerToast({
-                message: t('toast.faield_add_new_user'),
-                type: 'warning',
-                icon: 'material-symbols:warning-rounded'
-            });
-        })
-        .finally(() => {
-            isAdding.value = false;
-            name.value = '';
-            email.value = '';
-            role.value = props.currentUserRole === 'Admin' ? 'Admin' : 'Manager';
-            dateJoined.value = new Date().toISOString().slice(0, 10);
-        })
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        router.push('/table-view');
+    } catch (error) {
+        triggerToast({
+            message: t('toast.faield_add_new_user'),
+            type: 'warning',
+            icon: 'material-symbols:warning-rounded'
+        });
+    } finally {
+        isAdding.value = false;
+        name.value = '';
+        email.value = '';
+        role.value = props.currentUserRole === 'Admin' ? 'Admin' : 'Manager';
+        dateJoined.value = new Date().toISOString().slice(0, 10);
+    }
 }
 </script>
